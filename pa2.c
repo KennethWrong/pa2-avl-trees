@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <
+#include "hbt.h"
+#include "create_tree.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +12,7 @@ int main(int argc, char *argv[])
 
     char flag = argv[1][1]
 
+    /**
     if (flag == 'b')
     {
         //build bst with instructions from input file
@@ -24,5 +26,8 @@ int main(int argc, char *argv[])
         //input flag is wrong
         return EXIT_FAILURE;
     }
+    **/
 
+    read_binary_to_txt(argv[2], argv[3]);
+    return 0
 }

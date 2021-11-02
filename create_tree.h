@@ -1,1 +1,10 @@
-
+Tnode *create_new_node(int key);
+Tnode *leftRotate(Tnode *a);
+Tnode *create_tree(char *filename);
+Tnode *insert(Tnode *node, int key);
+int getBalance(Tnode *N);
+Tnode *leftRotate(Tnode *a);
+Tnode *rightRotate(Tnode *a);
+void preOrder(Tnode *root);
+int max(int a, int b);
+int height(Tnode *N);

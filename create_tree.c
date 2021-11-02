@@ -1,17 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hbt.h"
-
-Tnode *create_new_node(int key);
-Tnode *leftRotate(Tnode *a);
-Tnode *create_tree(char *filename);
-Tnode *insert(Tnode *node, int key);
-int getBalance(Tnode *N);
-Tnode *leftRotate(Tnode *a);
-Tnode *rightRotate(Tnode *a);
-void preOrder(Tnode *root);
-int max(int a, int b);
-int height(Tnode *N);
+#include "create_tree.h"
 
 Tnode *create_tree(char *filename)
 {
@@ -148,12 +138,12 @@ void preOrder(Tnode *root)
     }
 }
 
-
+/**
 int main()
 {
   Tnode *root = NULL;
 
-  /* Constructing tree given in the above figure */
+  //Constructing tree given in the above figure
   root = insert(root, 10);
   insert(root, 20);
   root = insert(root, 30);
@@ -161,13 +151,7 @@ int main()
   root = insert(root, 50);
   root = insert(root, 25);
 
-  /* The constructed AVL Tree would be
-            30
-           /  \
-         20   40
-        /  \     \
-       10  25    50
-  */
+
 
   printf("Preorder traversal of the constructed AVL"
          " tree is \n");
@@ -175,7 +159,42 @@ int main()
 
   return 0;
 }
+**/
 
+
+int read_binary_to_txt(char* infile, char * outfile)
+{
+    FILE *read_ptr;
+    read_ptr = fopen(infile, "rb");
+
+    FILE *write_ptr;
+    write_ptr = fopen(outfile,"w");
+
+    if(read_ptr == NULL)
+    {
+        return 1;
+    }
+    fseek(read_ptr,0,SEEK_END);
+    int size_of_file = ftell(read_ptr);
+    fseek(read_ptr,0,SEEK_SET);
+
+    int c = fgetc(read_ptr);
+    int curr_int;
+    char curr_char;
+    while (c != EOF)
+    {
+        fread(curr_int, sizeof(int),1, read_ptr);
+        fread(curr_char, sizeof(char),1, read_ptr);
+
+        fwrite(curr_int,sizeof(int),1,write_ptr);
+        fwrite(curr_char,sizeof(char),1,write_ptr);
+        c = fgetc(read_ptr);
+    }
+    fclose(read_ptr);
+    fclose(write_ptr);
+
+    return 0
+}
 
 
 
