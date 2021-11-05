@@ -3,11 +3,6 @@
 #include "hbt.h"
 #include "create_tree.h"
 
-Tnode *create_tree(char *filename)
-{
-    //create tree
-}
-
 //Helper function to find height of subtree without segfault
 int height(Tnode *N)
 {
@@ -138,63 +133,87 @@ void preOrder(Tnode *root)
     }
 }
 
-/**
-int main()
+
+Tnode *deleteNode(Tnode *root, int key)
 {
-  Tnode *root = NULL;
+    //case 1: node to delete is head
+    //case 2: node to delete has two children
+    //case 3: node to delete one or no children
 
-  //Constructing tree given in the above figure
-  root = insert(root, 10);
-  insert(root, 20);
-  root = insert(root, 30);
-  root = insert(root, 40);
-  root = insert(root, 50);
-  root = insert(root, 25);
+    //case 1: node to delete is head
+    if (root == NULL)
+    {
+        return root;
+    }
 
+    if (key < root->key)
+    {
+        root->left = deleteNode(root->left,key);
+    }
+    else if (key > root->key)
+    {
+        root->right = deleteNode(root->right,key);
+    }
+    else{
+        if((root->left == NULL) || (root->right == NULL))
+        {
+            Tnode *temp = root->left ? root->left: root->right;
 
+            if (temp == NULL)
+            {
+                temp = root;
+                free(root);
+            }
+            else
+            {
+                *root = *temp;
+            }
+            free(temp);
+        }
+        else
+        {
+            Tnode *temp = get_predecesor(root->left);
+            root->key = temp->key;
+            root->right = deleteNode(root->right,temp->key);
+        }
+    }
+    if (root == NULL)
+    {
+        return root;
+    }
 
-  printf("Preorder traversal of the constructed AVL"
-         " tree is \n");
-  preOrder(root);
+    root->height = 1 + max(height(root->left), height(root->right));
+    int balance = getBalance(root);
 
-  return 0;
+        if (balance > 1 && getBalance(root->left) >= 0)
+        return rightRotate(root);
+ 
+    // Left Right Case
+    if (balance > 1 && getBalance(root->left) < 0)
+    {
+        root->left =  leftRotate(root->left);
+        return rightRotate(root);
+    }
+ 
+    // Right Right Case
+    if (balance < -1 && getBalance(root->right) <= 0)
+        return leftRotate(root);
+ 
+    // Right Left Case
+    if (balance < -1 && getBalance(root->right) > 0)
+    {
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+ 
+    return root;
 }
-**/
 
-
-int read_binary_to_txt(char* infile, char * outfile)
+Tnode* get_predecesor(Tnode* node)
 {
-    FILE *read_ptr;
-    read_ptr = fopen(infile, "rb");
-
-    FILE *write_ptr;
-    write_ptr = fopen(outfile,"w");
-
-    if(read_ptr == NULL)
+    while (node->right != NULL)
     {
-        return 1;
+        node = node->right;
     }
-    fseek(read_ptr,0,SEEK_END);
-    int size_of_file = ftell(read_ptr);
-    fseek(read_ptr,0,SEEK_SET);
-
-    int c = fgetc(read_ptr);
-    int curr_int;
-    char curr_char;
-    while (c != EOF)
-    {
-        fread(curr_int, sizeof(int),1, read_ptr);
-        fread(curr_char, sizeof(char),1, read_ptr);
-
-        fwrite(curr_int,sizeof(int),1,write_ptr);
-        fwrite(curr_char,sizeof(char),1,write_ptr);
-        c = fgetc(read_ptr);
-    }
-    fclose(read_ptr);
-    fclose(write_ptr);
-
-    return 0
+    return node;
 }
-
-
-

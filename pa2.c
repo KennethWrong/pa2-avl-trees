@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "hbt.h"
 #include "create_tree.h"
+#include "tree_helper.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,7 +11,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    char flag = argv[1][1]
+    char flag = argv[1][1];
 
     /**
     if (flag == 'b')
@@ -28,6 +29,30 @@ int main(int argc, char *argv[])
     }
     **/
 
-    read_binary_to_txt(argv[2], argv[3]);
-    return 0
+    //read_binary_to_txt(argv[2], argv[3]);
+    read_text(argv[2]);
+    return 0;
 }
+
+/**
+int main()
+{
+  Tnode *root = NULL;
+
+  //Constructing tree given in the above figure
+  root = insert(root, 10);
+  insert(root, 20);
+  root = insert(root, 30);
+  root = insert(root, 40);
+  root = insert(root, 50);
+  root = insert(root, 25);
+
+
+
+  printf("Preorder traversal of the constructed AVL"
+         " tree is \n");
+  preOrder(root);
+
+  return 0;
+}
+**/
