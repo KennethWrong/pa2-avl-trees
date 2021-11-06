@@ -85,7 +85,6 @@ Tnode *create_new_node(int key)
     return new_node;
 }
 
-//
 int max(int a, int b)
 {
     return (a > b)? a : b;
@@ -128,6 +127,20 @@ void preOrder(Tnode *root)
     if(root != NULL)
     {
         printf("%d ", root->key);
+        if((root->left != NULL) && (root->right != NULL))
+        {
+            printf("3\n");
+        }
+        else if((root->left == NULL) && (root->right == NULL))
+        {
+            printf("0\n");
+        }
+        else{
+            int print_num;
+            print_num = root->left != NULL ? 2:1;
+            printf("%d\n",print_num);
+        }
+
         preOrder(root->left);
         preOrder(root->right);
     }
@@ -136,11 +149,8 @@ void preOrder(Tnode *root)
 
 Tnode *deleteNode(Tnode *root, int key)
 {
-    //case 1: node to delete is head
-    //case 2: node to delete has two children
-    //case 3: node to delete one or no children
 
-    //case 1: node to delete is head
+
     if (root == NULL)
     {
         return root;
@@ -154,18 +164,23 @@ Tnode *deleteNode(Tnode *root, int key)
     {
         root->right = deleteNode(root->right,key);
     }
+    //this is when our node equals the key to delete
     else{
+        //If this node has one or no children
         if((root->left == NULL) || (root->right == NULL))
         {
+            //temp to be the side that is not null
             Tnode *temp = root->left ? root->left: root->right;
 
+            //When both children are NULL
             if (temp == NULL)
             {
                 temp = root;
-                free(root);
+                root = NULL;
             }
             else
             {
+                //copy content of non-empty child
                 *root = *temp;
             }
             free(temp);
@@ -174,7 +189,7 @@ Tnode *deleteNode(Tnode *root, int key)
         {
             Tnode *temp = get_predecesor(root->left);
             root->key = temp->key;
-            root->right = deleteNode(root->right,temp->key);
+            root->left = deleteNode(root->left,temp->key);
         }
     }
     if (root == NULL)
@@ -211,9 +226,10 @@ Tnode *deleteNode(Tnode *root, int key)
 
 Tnode* get_predecesor(Tnode* node)
 {
-    while (node->right != NULL)
+    Tnode * curr = node;
+    while (curr->right != NULL)
     {
-        node = node->right;
+        curr = curr->right;
     }
-    return node;
+    return curr;
 }

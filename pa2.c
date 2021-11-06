@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     {
         return EXIT_FAILURE;
     }
-
+    int res;
     char flag = argv[1][1];
 
     /**
@@ -28,31 +28,28 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
     **/
-
     //read_binary_to_txt(argv[2], argv[3]);
-    read_text(argv[2]);
+    
+    //-1 is error
+    if (flag == 'b')
+    {
+        res = build_tree_text(argv[2], argv[3]);
+        if (res == -1)
+        {
+            fprintf(stdout,"%d",res);
+            return EXIT_FAILURE;
+        }
+        else if (res == 1)
+        {
+            fprintf(stdout,"%d",res);
+            return EXIT_SUCCESS;
+        }
+    }
+    else if(flag == 'e')
+    {
+        build_tree_text_e(argv[2]);
+    }
+
+
     return 0;
 }
-
-/**
-int main()
-{
-  Tnode *root = NULL;
-
-  //Constructing tree given in the above figure
-  root = insert(root, 10);
-  insert(root, 20);
-  root = insert(root, 30);
-  root = insert(root, 40);
-  root = insert(root, 50);
-  root = insert(root, 25);
-
-
-
-  printf("Preorder traversal of the constructed AVL"
-         " tree is \n");
-  preOrder(root);
-
-  return 0;
-}
-**/

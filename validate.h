@@ -1,0 +1,1 @@
+Tnode* read_text_e(char* infile);

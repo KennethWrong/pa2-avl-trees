@@ -1,2 +1,3 @@
-int read_text(char* infile);
-int read_binary_to_txt(char* infile, char * outfile);
+int build_tree_text(char* infile, char * outfile);
+int build_tree_binary(char* infile, char * outfile);
+Tnode* build_tree_text_e(char* infile);
