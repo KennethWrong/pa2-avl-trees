@@ -5,7 +5,7 @@ ERROR = -Wvla
 GCC = gcc -std=c99 -03 $(WARNING) $(ERROR)
 
 all:
-	$(CC) create_tree.c pa2.c tree_helper.c -o pa2
+	$(CC) *.c -o pa2
 
 exec:
 	./pa1
@@ -15,13 +15,25 @@ clean:
 	rm -rf *.o
 
 test1:
-	./pa2 -b ./examples/ops0.b ./tests/ops0m.txt
+	./pa2 -b ./examples/ops0.b ./tests/test1.b
 test2:
-	./pa2 -b ./examples/ops0.txt ./tests/ops0mt.txt
+	./pa2 -b ./examples/ops1.b ./tests/test2.b
 test3:
-	./pa2 -b ./examples/ops2.txt ./tests/ops2t.txt
+	./pa2 -b ./examples/ops2.b ./tests/test3.b
 test4:
-	./pa2 -b ./examples/ops3.txt ./tests/ops3t.txt
+	./pa2 -b ./examples/ops3.b ./tests/test4.b
+
 test5:
-	./pa2 -b ./examples/personal.txt ./tests/ops3t.txt
-	
+	./pa2 -e ./examples/tree0.b
+test6:
+	./pa2 -e ./examples/tree1.b
+test7:
+	./pa2 -e ./examples/tree2.b
+test8:
+	./pa2 -e ./examples/tree3.b
+test9:
+	./pa2 -e ./examples/invalidtree0.b
+test10:
+	./pa2 -e ./examples/invalidtree1.b
+test11:
+	./pa2 -e ./examples/invalidtree2.b

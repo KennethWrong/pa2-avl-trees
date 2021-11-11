@@ -121,32 +121,6 @@ Tnode *rightRotate(Tnode *a)
     return b;
 }
 
-//Prints tree in preoreder
-void preOrder(Tnode *root)
-{
-    if(root != NULL)
-    {
-        printf("%d ", root->key);
-        if((root->left != NULL) && (root->right != NULL))
-        {
-            printf("3\n");
-        }
-        else if((root->left == NULL) && (root->right == NULL))
-        {
-            printf("0\n");
-        }
-        else{
-            int print_num;
-            print_num = root->left != NULL ? 2:1;
-            printf("%d\n",print_num);
-        }
-
-        preOrder(root->left);
-        preOrder(root->right);
-    }
-}
-
-
 Tnode *deleteNode(Tnode *root, int key)
 {
 
@@ -232,4 +206,39 @@ Tnode* get_predecesor(Tnode* node)
         curr = curr->right;
     }
     return curr;
+}
+
+//Prints tree in preoreder
+void preOrder(Tnode *root, FILE *fptr)
+{
+    if(root != NULL)
+    {
+        char childs;
+        if((root->left != NULL) && (root->right != NULL))
+        {
+            childs = '3';
+        }
+        else if((root->left == NULL) && (root->right == NULL))
+        {
+            childs = '0';
+        }
+        else{
+            childs = root->left != NULL ? '2':'1';
+        }
+        printf("%d %c",root->key, childs);
+        fprintf(fptr, "%d %c\n", root->key, childs);
+        preOrder(root->left, fptr);
+        preOrder(root->right, fptr);
+    }
+}
+
+void deallocate (Tnode * node)
+{
+    if(node==NULL)
+        return;
+
+    deallocate(node->right);
+    deallocate(node->left);
+
+    free(node);
 }

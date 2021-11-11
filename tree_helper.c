@@ -2,11 +2,15 @@
 #include <stdlib.h>
 #include "hbt.h"
 #include "create_tree.h"
+#include "validate.h"
 
 int build_tree_binary(char* infile, char * outfile)
 {
     FILE *read_ptr;
-    read_ptr = fopen(infile, "r");
+    FILE *write_ptr;
+    write_ptr = fopen(outfile, "wb");
+    read_ptr = fopen(infile, "rb");
+    
 
     if(read_ptr == NULL)
     {
@@ -20,7 +24,7 @@ int build_tree_binary(char* infile, char * outfile)
     fseek(read_ptr,0,SEEK_SET);
 
     int c = fgetc(read_ptr);
-    long int *curr_int = malloc(sizeof(int));
+    int *curr_int = malloc(sizeof(int));
     char *curr_char = malloc(sizeof(char));
     long int size = ftell(read_ptr);
     
@@ -28,126 +32,83 @@ int build_tree_binary(char* infile, char * outfile)
     {
         ungetc(c,read_ptr);
         size = ftell(read_ptr);
-        fread(curr_int,sizeof(long) ,1,read_ptr);
+        fread(curr_int,sizeof(int) ,1,read_ptr);
         fread(curr_char,sizeof(char) ,1,read_ptr);
-        printf("%ld %c\n",*curr_int, *curr_char);
         long int size2 = ftell(read_ptr);
-        if (size2 - size < 3)
-        {
-            break;
+        if (size2 - size < 3){
+            return 0;
         }
-        else
-        {
+        else{
             size = size2;
         }
-        c = fgetc(read_ptr);
 
-        if(*curr_char == 'i')
-        {
+        if(*curr_char == 'i'){
             root = insert(root, *curr_int);
         }
-        else if(*curr_char == 'd')
-        {
+        else if(*curr_char == 'd'){
             root = deleteNode(root, *curr_int);
         }
+        else{
+            return 0;
+        }
+        c = fgetc(read_ptr);
     }
-    preOrder(root);
+    preOrder(root, write_ptr);
     fclose(read_ptr);
+    fclose(write_ptr);
+    deallocate(root);
 
     return 1;
 }
 
-int build_tree_text(char* infile, char * outfile)
+int build_tree_e(char* infile, char *outfile)
 {
     FILE *read_ptr;
-    read_ptr = fopen(infile, "r");
+    read_ptr = fopen(infile, "rb");
+    int file_validity;
 
     if(read_ptr == NULL)
     {
+        fprintf(stdout,"-1,X,X");
         return 1;
     }
-
     Tnode *root = NULL;
+    //wrong format???
 
     fseek(read_ptr,0,SEEK_END);
     int size_of_file = ftell(read_ptr);
     fseek(read_ptr,0,SEEK_SET);
+
+    if (size_of_file % (sizeof(int) + sizeof(char)) != 0){
+        fprintf(stdout,"0,X,X");
+        return 1;
+    }
+
+    int total_nodes = size_of_file / (sizeof(int) + sizeof(char));
 
     int c = fgetc(read_ptr);
 
     int *curr_int = malloc(sizeof(int));
     char *curr_char = malloc(sizeof(char));
-    long int size = ftell(read_ptr);
+    long int size;
     while (c != EOF)
     {
         ungetc(c,read_ptr);
-        size = ftell(read_ptr);
-        fscanf(read_ptr,"%d %c",curr_int,curr_char);
-        printf("%d %c\n",*curr_int, *curr_char);
-        long int size2 = ftell(read_ptr);
-        if (size2 - size < 3)
-        {
-            break;
-        }else{
-            size = size2;
-        }
+        fread(curr_int,sizeof(int) ,1,read_ptr);
+        fread(curr_char,sizeof(char) ,1,read_ptr);
+        printf("%d %d\n",*curr_int, *curr_char);
+
         c = fgetc(read_ptr);
-
-        if(*curr_char == 'i')
-        {
-            root = insert(root, *curr_int);
-        }
-        else if(*curr_char == 'd')
-        {
-            root = deleteNode(root, *curr_int);
-        }
-    }
-    preOrder(root);
-    fclose(read_ptr);
-
-    return 0;
-}
-
-Tnode* build_tree_text_e(char* infile)
-{
-    FILE *read_ptr;
-    read_ptr = fopen(infile, "r");
-
-    if(read_ptr == NULL)
-    {
-        printf("-1,0,0");
-        return -1;
-    }
-
-    Tnode *root = NULL;
-
-    fseek(read_ptr,0,SEEK_END);
-    int size_of_file = ftell(read_ptr);
-    fseek(read_ptr,0,SEEK_SET);
-
-    int c = fgetc(read_ptr);
-
-    int *curr_int = malloc(sizeof(int));
-    int *int2 = malloc(sizeof(int));
-    long int size = ftell(read_ptr);
-    while (c != EOF)
-    {
-        ungetc(c,read_ptr);
-        size = ftell(read_ptr);
-        fscanf(read_ptr,"%d %d",curr_int,int2);
-        printf("%d %c\n",*curr_int, *int2);
-        long int size2 = ftell(read_ptr);
-        if (size2 - size < 3)
-        {
-            break;
-        }else{
-            size = size2;
-        }
-        c = fgetc(read_ptr);
-
         root = insert(root, *curr_int);
     }
     fclose(read_ptr);
 
-    return root;
+    file_validity = 1;
+    int height_balanced;
+    height_balanced = check_balanced(root);
+    int is_bst = check_if_bst(root);
+    printf("%d,%d,%d",file_validity, is_bst, height_balanced);
+
+    deallocate(root);
+    return 0;
 }
