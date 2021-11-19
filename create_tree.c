@@ -247,8 +247,6 @@ Tnode *preorder_rebuild_BST(int *a, char *b, int *ptr)
     char *child_info = malloc(sizeof(char));
     *child_info = b[*ptr];
 
-    printf("key value: %d\n",a[*ptr]);
-
     Tnode *root = (Tnode *)malloc(sizeof(Tnode));
 
     if(root != NULL){
@@ -267,6 +265,7 @@ Tnode *preorder_rebuild_BST(int *a, char *b, int *ptr)
         else if(*child_info == 1){
             root->right = preorder_rebuild_BST(a,b,ptr); 
         }
+        root->height = max(height(root->left), height(root->right)) + 1;
     }
     return root;
 }

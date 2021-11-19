@@ -74,7 +74,6 @@ int build_tree_e(char* infile, char *outfile)
         return 1;
     }
     Tnode *root = NULL;
-    //wrong format???
 
     fseek(read_ptr,0,SEEK_END);
     int size_of_file = ftell(read_ptr);
@@ -105,6 +104,11 @@ int build_tree_e(char* infile, char *outfile)
     int *index = malloc(sizeof(int));
     *index = 0;
     root = preorder_rebuild_BST(pre_order_array,number_of_child_array,index);
+    if(root == NULL && total_nodes > 0){
+        fprintf(stdout,"0,X,X");
+        return 1;
+    }
+
     treeTraversal(root);
     if(*index == total_nodes)
     {
@@ -117,6 +121,7 @@ int build_tree_e(char* infile, char *outfile)
     int height_balanced;
     height_balanced = check_balanced(root);
     int is_bst = check_if_bst(root);
+    fprintf(stdout,"%d,%d,%d",file_validity,is_bst,height_balanced);
     deallocate(root);
     return 0;
 }
