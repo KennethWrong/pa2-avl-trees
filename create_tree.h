@@ -10,3 +10,4 @@ int height(Tnode *N);
 Tnode *deleteNode(Tnode *root, int key);
 Tnode *get_predecesor(Tnode *node);
 void deallocate (Tnode * node);
+Tnode *preorder_rebuild_BST(int *a, char*b,int *ptr);

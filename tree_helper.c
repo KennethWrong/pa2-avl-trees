@@ -3,6 +3,7 @@
 #include "hbt.h"
 #include "create_tree.h"
 #include "validate.h"
+void treeTraversal(Tnode *node);
 
 int build_tree_binary(char* infile, char * outfile)
 {
@@ -85,30 +86,46 @@ int build_tree_e(char* infile, char *outfile)
     }
 
     int total_nodes = size_of_file / (sizeof(int) + sizeof(char));
-
-    int c = fgetc(read_ptr);
+    int *pre_order_array = malloc(total_nodes * sizeof(int));
+    char *number_of_child_array = malloc(total_nodes * sizeof(char));
 
     int *curr_int = malloc(sizeof(int));
     char *curr_char = malloc(sizeof(char));
     long int size;
-    while (c != EOF)
+    int i = 0;
+    while (fread(curr_int,sizeof(int) ,1,read_ptr))
     {
-        ungetc(c,read_ptr);
-        fread(curr_int,sizeof(int) ,1,read_ptr);
         fread(curr_char,sizeof(char) ,1,read_ptr);
-        printf("%d %d\n",*curr_int, *curr_char);
-
-        c = fgetc(read_ptr);
-        root = insert(root, *curr_int);
+        pre_order_array[i] = *curr_int;
+        number_of_child_array[i] = *curr_char;
+        i++;
     }
     fclose(read_ptr);
 
-    file_validity = 1;
+    int *index = malloc(sizeof(int));
+    *index = 0;
+    root = preorder_rebuild_BST(pre_order_array,number_of_child_array,index);
+    treeTraversal(root);
+    if(*index == total_nodes)
+    {
+        file_validity = 1;
+    }
+    else{
+        file_validity = 0;
+    }
+
     int height_balanced;
     height_balanced = check_balanced(root);
     int is_bst = check_if_bst(root);
-    printf("%d,%d,%d",file_validity, is_bst, height_balanced);
-
     deallocate(root);
     return 0;
+}
+
+void treeTraversal(Tnode *node){
+    if(node == NULL)
+    {
+        return;
+    }
+    treeTraversal(node->left);
+    treeTraversal(node->right);
 }

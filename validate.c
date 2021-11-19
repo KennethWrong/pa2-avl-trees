@@ -41,10 +41,9 @@ int check_if_bst(Tnode *node){
 
     int left = check_if_bst(node->left);
     int right = check_if_bst(node->right);
-
+    //printf("%d %d %d\n", left,right, node->key);
     if(left==0 || right==0){
         return 0;
     }
     return 1;
-
 }

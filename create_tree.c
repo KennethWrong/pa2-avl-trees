@@ -225,7 +225,6 @@ void preOrder(Tnode *root, FILE *fptr)
         else{
             childs = root->left != NULL ? '2':'1';
         }
-        printf("%d %c",root->key, childs);
         fprintf(fptr, "%d %c\n", root->key, childs);
         preOrder(root->left, fptr);
         preOrder(root->right, fptr);
@@ -241,4 +240,33 @@ void deallocate (Tnode * node)
     deallocate(node->left);
 
     free(node);
+}
+
+Tnode *preorder_rebuild_BST(int *a, char *b, int *ptr)
+{
+    char *child_info = malloc(sizeof(char));
+    *child_info = b[*ptr];
+
+    printf("key value: %d\n",a[*ptr]);
+
+    Tnode *root = (Tnode *)malloc(sizeof(Tnode));
+
+    if(root != NULL){
+        root->key = a[*ptr];
+        (*ptr)++;
+
+        if(*child_info == 3)
+        {
+            root->left = preorder_rebuild_BST(a,b, ptr);
+            root->right = preorder_rebuild_BST(a,b, ptr); 
+        }
+        else if(*child_info == 2)
+        {
+            root->left = preorder_rebuild_BST(a,b, ptr);
+        }
+        else if(*child_info == 1){
+            root->right = preorder_rebuild_BST(a,b,ptr); 
+        }
+    }
+    return root;
 }
