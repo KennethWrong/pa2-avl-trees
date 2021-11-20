@@ -37,3 +37,11 @@ test10:
 	./pa2 -e ./examples/invalidtree1.b
 test11:
 	./pa2 -e ./examples/invalidtree2.b
+test12:
+	./pa2 -e ./examples/Emptyfile.b
+test13:
+	./pa2 -e ./examples/joe.b
+test14:
+	./pa2 -b ./examples/joe.b ./tests/test4.b
+test15:
+	./pa2 -b ./examples/Emptyfile.b ./tests/joe4.b

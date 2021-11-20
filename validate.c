@@ -10,8 +10,6 @@ int check_balanced(Tnode *node){
     }
     int balance;
     balance = getBalance(node);
-    printf("node height is is %d\n",node->height);
-    printf("balance is %d\n",balance);
     if (balance > 1 || balance < -1 ){
         return 0;
     }

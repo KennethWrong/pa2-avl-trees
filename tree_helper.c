@@ -3,6 +3,7 @@
 #include "hbt.h"
 #include "create_tree.h"
 #include "validate.h"
+
 void treeTraversal(Tnode *node);
 
 int build_tree_binary(char* infile, char * outfile)
@@ -23,6 +24,10 @@ int build_tree_binary(char* infile, char * outfile)
     fseek(read_ptr,0,SEEK_END);
     int size_of_file = ftell(read_ptr);
     fseek(read_ptr,0,SEEK_SET);
+
+    if(size_of_file == 0){
+        return 0;
+    }
 
     int c = fgetc(read_ptr);
     int *curr_int = malloc(sizeof(int));
@@ -70,7 +75,7 @@ int build_tree_e(char* infile, char *outfile)
 
     if(read_ptr == NULL)
     {
-        fprintf(stdout,"-1,X,X");
+        fprintf(stdout,"-1,X,X\n");
         return 1;
     }
     Tnode *root = NULL;
@@ -80,7 +85,11 @@ int build_tree_e(char* infile, char *outfile)
     fseek(read_ptr,0,SEEK_SET);
 
     if (size_of_file % (sizeof(int) + sizeof(char)) != 0){
-        fprintf(stdout,"0,X,X");
+        fprintf(stdout,"0,X,X\n");
+        return 1;
+    }
+    if(size_of_file <= 0 || size_of_file <= sizeof(int) || size_of_file <= sizeof(char)){
+        fprintf(stdout, "0,X,X\n");
         return 1;
     }
 
@@ -104,12 +113,13 @@ int build_tree_e(char* infile, char *outfile)
     int *index = malloc(sizeof(int));
     *index = 0;
     root = preorder_rebuild_BST(pre_order_array,number_of_child_array,index);
+
+
     if(root == NULL && total_nodes > 0){
-        fprintf(stdout,"0,X,X");
+        fprintf(stdout,"0,X,X\n");
         return 1;
     }
 
-    treeTraversal(root);
     if(*index == total_nodes)
     {
         file_validity = 1;
@@ -123,11 +133,16 @@ int build_tree_e(char* infile, char *outfile)
     int is_bst = check_if_bst(root);
     fprintf(stdout,"%d,%d,%d",file_validity,is_bst,height_balanced);
     deallocate(root);
+    free(index);
+    free(curr_int);
+    free(curr_char);
+    free(pre_order_array);
+    free(number_of_child_array);
     return 0;
 }
 
 void treeTraversal(Tnode *node){
-    if(node == NULL)
+    if(node == NULL || sizeof(node) != sizeof(Tnode *))
     {
         return;
     }

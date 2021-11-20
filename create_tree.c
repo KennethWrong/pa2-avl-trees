@@ -123,8 +123,6 @@ Tnode *rightRotate(Tnode *a)
 
 Tnode *deleteNode(Tnode *root, int key)
 {
-
-
     if (root == NULL)
     {
         return root;
@@ -248,9 +246,12 @@ Tnode *preorder_rebuild_BST(int *a, char *b, int *ptr)
     *child_info = b[*ptr];
 
     Tnode *root = (Tnode *)malloc(sizeof(Tnode));
+    root->left = NULL;
+    root->right = NULL;
 
     if(root != NULL){
-        root->key = a[*ptr];
+        int value = a[*ptr];
+        root->key = value;
         (*ptr)++;
 
         if(*child_info == 3)
@@ -266,6 +267,11 @@ Tnode *preorder_rebuild_BST(int *a, char *b, int *ptr)
             root->right = preorder_rebuild_BST(a,b,ptr); 
         }
         root->height = max(height(root->left), height(root->right)) + 1;
+    }else{
+        free(root);
+        free(child_info);
+        return NULL;
     }
+    free(child_info);
     return root;
 }
