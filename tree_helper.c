@@ -25,8 +25,12 @@ int build_tree_binary(char* infile, char * outfile)
     int size_of_file = ftell(read_ptr);
     fseek(read_ptr,0,SEEK_SET);
 
+    if(size_of_file%(sizeof(int)+sizeof(char)) != 0){
+        return -1;
+    }
+
     if(size_of_file == 0){
-        return 0;
+        return -1;
     }
 
     int c = fgetc(read_ptr);
@@ -42,6 +46,9 @@ int build_tree_binary(char* infile, char * outfile)
         fread(curr_char,sizeof(char) ,1,read_ptr);
         long int size2 = ftell(read_ptr);
         if (size2 - size < 3){
+            deallocate(root);
+            free(curr_char);
+            free(curr_int);
             return 0;
         }
         else{
@@ -55,13 +62,16 @@ int build_tree_binary(char* infile, char * outfile)
             root = deleteNode(root, *curr_int);
         }
         else{
+            deallocate(root);
+            free(curr_char);
+            free(curr_int);
             return 0;
         }
         c = fgetc(read_ptr);
     }
     preOrder(root, write_ptr);
-    fclose(read_ptr);
-    fclose(write_ptr);
+    free(curr_int);
+    free(curr_char);
     deallocate(root);
 
     return 1;
@@ -117,6 +127,9 @@ int build_tree_e(char* infile, char *outfile)
 
     if(root == NULL && total_nodes > 0){
         fprintf(stdout,"0,X,X\n");
+        free(index);
+        free(curr_int);
+        free(curr_char);
         return 1;
     }
 
@@ -131,7 +144,7 @@ int build_tree_e(char* infile, char *outfile)
     int height_balanced;
     height_balanced = check_balanced(root);
     int is_bst = check_if_bst(root);
-    fprintf(stdout,"%d,%d,%d",file_validity,is_bst,height_balanced);
+    fprintf(stdout,"%d,%d,%d\n",file_validity,is_bst,height_balanced);
     deallocate(root);
     free(index);
     free(curr_int);

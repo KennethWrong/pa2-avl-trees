@@ -12,18 +12,19 @@ int main(int argc, char *argv[])
     if (flag == 'b')
     {
         if(argc != 4){
+            fprintf(stdout,"%d\n",-1);
             return EXIT_FAILURE;
         }
 
         res = build_tree_binary(argv[2], argv[3]);
         if (res == 1)
         {
-            fprintf(stdout,"%d",res);
+            fprintf(stdout,"%d\n",res);
             return EXIT_SUCCESS;
         }
         else
         {
-            fprintf(stdout,"%d",res);
+            fprintf(stdout,"%d\n",res);
             return EXIT_FAILURE;
         }
     }

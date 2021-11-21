@@ -4,6 +4,9 @@ WARNING = -Wall -Wshadow -pedantic
 ERROR = -Wvla
 GCC = gcc -std=c99 -03 $(WARNING) $(ERROR)
 
+pa4:
+	$(CC) *.c -o pa2
+
 all:
 	$(CC) *.c -o pa2
 

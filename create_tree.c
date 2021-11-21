@@ -267,11 +267,8 @@ Tnode *preorder_rebuild_BST(int *a, char *b, int *ptr)
             root->right = preorder_rebuild_BST(a,b,ptr); 
         }
         root->height = max(height(root->left), height(root->right)) + 1;
-    }else{
-        free(root);
-        free(child_info);
-        return NULL;
     }
+    
     free(child_info);
     return root;
 }
